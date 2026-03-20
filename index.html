@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oak Basin Dairy - Dry Matter Recording</title>
+<style>
+  :root {
+    --primary: #2d6a4f;
+    --primary-light: #40916c;
+    --primary-dark: #1b4332;
+    --accent: #d4a373;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-light: #555;
+    --border: #d0d0c8;
+    --danger: #c1121f;
+    --danger-light: #e5383b;
+    --success: #2d6a4f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--primary-dark);
+    color: white;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  header h1 { font-size: 1.3rem; font-weight: 600; }
+  header .subtitle { font-size: 0.85rem; opacity: 0.8; margin-top: 2px; }
+
+  .year-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 0.9rem;
+  }
+
+  .year-selector select {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 0.9rem;
+  }
+
+  .year-selector select option { color: var(--text); background: white; }
+
+  .conn-status {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+
+  .conn-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  .conn-dot.online { background: #52b788; }
+  .conn-dot.offline { background: #e5383b; }
+
+  nav {
+    display: flex;
+    background: var(--primary);
+    border-bottom: 2px solid var(--primary-dark);
+  }
+
+  nav button {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+  }
+
+  nav button:hover { color: white; background: rgba(255,255,255,0.05); }
+  nav button.active {
+    color: white;
+    border-bottom-color: var(--accent);
+    background: rgba(255,255,255,0.1);
+  }
+
+  .page { display: none; padding: 20px; max-width: 700px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  .card {
+    background: var(--card);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    border: 1px solid var(--border);
+  }
+
+  .card h2 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    color: var(--primary-dark);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+
+  .form-group { margin-bottom: 14px; }
+
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-light);
+  }
+
+  .form-group select,
+  .form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+  }
+
+  .form-group select:focus,
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(45,106,79,0.15);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary { background: var(--primary); color: white; width: 100%; }
+  .btn-primary:hover { background: var(--primary-light); }
+  .btn-primary:disabled { background: #999; cursor: not-allowed; }
+  .btn-secondary { background: var(--accent); color: var(--primary-dark); }
+  .btn-secondary:hover { opacity: 0.85; }
+
+  .btn-danger {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .btn-danger:hover { background: var(--danger); color: white; }
+  .btn-small { padding: 6px 14px; font-size: 0.85rem; }
+
+  .dry-matter-result {
+    background: #f0faf4;
+    border: 1px solid #b7e4c7;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+  }
+
+  /* Records table */
+  .records-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .records-controls select,
+  .records-controls input {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+
+  thead th {
+    background: var(--primary-dark);
+    color: white;
+    padding: 10px 8px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:hover { background: #f0faf4; }
+  tbody td { padding: 8px; }
+  tbody td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  .empty-state {
+    text-align: center;
+    color: var(--text-light);
+    padding: 40px 20px;
+    font-size: 0.95rem;
+  }
+
+  /* Settings */
+  .field-list { list-style: none; margin-top: 8px; }
+
+  .field-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+  }
+
+  .add-field-row { display: flex; gap: 8px; margin-top: 8px; }
+  .add-field-row input { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 4px; }
+
+  .crop-section { margin-bottom: 20px; }
+  .crop-section h3 { font-size: 0.95rem; color: var(--primary); margin-bottom: 6px; }
+
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary-dark);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    max-width: 90%;
+    text-align: center;
+  }
+
+  .toast.show { opacity: 1; }
+
+  .delete-record {
+    background: none;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 2px 6px;
+  }
+
+  .delete-record:hover { color: var(--danger-light); }
+
+  .edit-record {
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 2px 6px;
+    font-weight: 600;
+  }
+
+  .edit-record:hover { color: var(--primary-light); text-decoration: underline; }
+  .record-actions { display: flex; gap: 4px; align-items: center; white-space: nowrap; }
+
+  /* Edit Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 900;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-overlay.show { display: flex; }
+
+  .modal {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 24px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+
+  .modal h2 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    color: var(--primary-dark);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+
+  .modal-buttons { display: flex; gap: 10px; margin-top: 16px; }
+  .modal-buttons .btn { flex: 1; }
+  .btn-cancel { background: var(--border); color: var(--text); }
+  .btn-cancel:hover { background: #bbb; }
+
+  .edit-dm-preview {
+    background: #f0faf4;
+    border: 1px solid #b7e4c7;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-top: 8px;
+  }
+
+  /* Setup screen */
+  .setup-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+  }
+
+  .setup-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 32px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .setup-card h2 { color: var(--primary-dark); margin-bottom: 8px; border: none; padding: 0; }
+  .setup-card p { color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px; }
+  .setup-card input { margin-bottom: 12px; }
+  .setup-error { color: var(--danger); font-size: 0.85rem; margin-top: 8px; }
+
+  /* Loading spinner */
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.7);
+    z-index: 800;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    color: var(--primary-dark);
+    font-weight: 600;
+  }
+
+  .loading-overlay.show { display: flex; }
+
+  @media (max-width: 600px) {
+    .form-row { grid-template-columns: 1fr; }
+    header { flex-direction: column; gap: 8px; align-items: flex-start; }
+    .year-selector { align-self: flex-end; }
+    table { font-size: 0.8rem; }
+    thead th, tbody td { padding: 6px 4px; }
+    nav button { font-size: 0.85rem; padding: 10px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SETUP SCREEN (shown if no API URL configured) -->
+<div id="setupScreen" class="setup-screen" style="display:none;">
+  <div class="setup-card">
+    <h2>Oak Basin Dairy</h2>
+    <p>Dry Matter Recording</p>
+    <p>Enter your Google Apps Script Web App URL to connect to your shared spreadsheet.</p>
+    <div class="form-group">
+      <input type="url" id="apiUrlInput" placeholder="https://script.google.com/macros/s/.../exec" style="text-align:center; font-size:0.85rem;">
+    </div>
+    <button class="btn btn-primary" onclick="connectToSheet()">Connect</button>
+    <div id="setupError" class="setup-error" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- MAIN APP (hidden until connected) -->
+<div id="mainApp" style="display:none;">
+
+<header>
+  <div>
+    <h1>Oak Basin Dairy</h1>
+    <div class="subtitle">Dry Matter Recording</div>
+    <div class="conn-status">
+      <span class="conn-dot online" id="connDot"></span>
+      <span id="connLabel">Connected</span>
+    </div>
+  </div>
+  <div class="year-selector">
+    <label for="activeYear">Year:</label>
+    <select id="activeYear"></select>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showPage('record')">New Record</button>
+  <button onclick="showPage('view')">View Records</button>
+  <button onclick="showPage('settings')">Settings</button>
+</nav>
+
+<!-- NEW RECORD PAGE -->
+<div id="page-record" class="page active">
+  <div class="card">
+    <h2>Record Dry Matter</h2>
+
+    <div class="form-group">
+      <label for="cropSelect">Crop</label>
+      <select id="cropSelect" onchange="onCropChange()">
+        <option value="">-- Select Crop --</option>
+        <option value="Ryelage">Ryelage</option>
+        <option value="Haylage">Haylage</option>
+        <option value="Silage">Silage</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="cutGroup" style="display:none;">
+      <label for="cutSelect">Cut Number</label>
+      <select id="cutSelect">
+        <option value="1">1st Cut</option>
+        <option value="2">2nd Cut</option>
+        <option value="3">3rd Cut</option>
+        <option value="4">4th Cut</option>
+        <option value="5">5th Cut</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="fieldSelect">Field</label>
+      <select id="fieldSelect">
+        <option value="">-- Select Crop First --</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="dateInput">Date Harvested</label>
+      <input type="date" id="dateInput">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="wetWeight">Wet Weight (g)</label>
+        <input type="number" id="wetWeight" step="0.1" min="0" placeholder="e.g. 100" oninput="calcDryMatter()">
+      </div>
+      <div class="form-group">
+        <label for="dryWeight">Dry Weight (g)</label>
+        <input type="number" id="dryWeight" step="0.1" min="0" placeholder="e.g. 35" oninput="calcDryMatter()">
+      </div>
+    </div>
+
+    <div class="dry-matter-result" id="dmResult">Dry Matter: --%</div>
+
+    <br>
+    <button class="btn btn-primary" id="saveBtn" onclick="saveRecord()">Save Record</button>
+  </div>
+</div>
+
+<!-- VIEW RECORDS PAGE -->
+<div id="page-view" class="page">
+  <div class="card">
+    <h2>Recorded Dry Matters</h2>
+
+    <div class="records-controls">
+      <select id="filterCrop" onchange="renderRecords()">
+        <option value="">All Crops</option>
+        <option value="Ryelage">Ryelage</option>
+        <option value="Haylage">Haylage</option>
+        <option value="Silage">Silage</option>
+      </select>
+      <select id="filterField" onchange="renderRecords()">
+        <option value="">All Fields</option>
+      </select>
+      <div style="flex:1;"></div>
+      <button class="btn btn-secondary btn-small" onclick="refreshData()">Refresh</button>
+      <button class="btn btn-secondary btn-small" onclick="exportCSV()">Export CSV</button>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Crop</th>
+            <th>Cut</th>
+            <th>Field</th>
+            <th>Wet (g)</th>
+            <th>Dry (g)</th>
+            <th>DM %</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="recordsBody">
+        </tbody>
+      </table>
+    </div>
+    <div id="emptyState" class="empty-state" style="display:none;">
+      No records yet. Start by adding a new record.
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS PAGE -->
+<div id="page-settings" class="page">
+  <div class="card">
+    <h2>Manage Fields for <span id="settingsYearLabel"></span></h2>
+    <p style="font-size:0.85rem; color:var(--text-light); margin-bottom:16px;">
+      Add or remove field names for each crop type. Fields are saved per year so you can update them annually.
+    </p>
+
+    <div class="crop-section">
+      <h3>Ryelage Fields</h3>
+      <ul class="field-list" id="fields-Ryelage"></ul>
+      <div class="add-field-row">
+        <input type="text" id="newField-Ryelage" placeholder="New field name..." onkeydown="if(event.key==='Enter') addField('Ryelage')">
+        <button class="btn btn-secondary btn-small" onclick="addField('Ryelage')">Add</button>
+      </div>
+    </div>
+
+    <div class="crop-section">
+      <h3>Haylage Fields</h3>
+      <ul class="field-list" id="fields-Haylage"></ul>
+      <div class="add-field-row">
+        <input type="text" id="newField-Haylage" placeholder="New field name..." onkeydown="if(event.key==='Enter') addField('Haylage')">
+        <button class="btn btn-secondary btn-small" onclick="addField('Haylage')">Add</button>
+      </div>
+    </div>
+
+    <div class="crop-section">
+      <h3>Silage Fields</h3>
+      <ul class="field-list" id="fields-Silage"></ul>
+      <div class="add-field-row">
+        <input type="text" id="newField-Silage" placeholder="New field name..." onkeydown="if(event.key==='Enter') addField('Silage')">
+        <button class="btn btn-secondary btn-small" onclick="addField('Silage')">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Copy Fields from Another Year</h2>
+    <p style="font-size:0.85rem; color:var(--text-light); margin-bottom:12px;">
+      Quickly copy all field assignments from a previous year as a starting point, then edit as needed.
+    </p>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <select id="copyFromYear" style="padding:8px; border:1px solid var(--border); border-radius:4px;"></select>
+      <button class="btn btn-secondary btn-small" onclick="copyFieldsFromYear()">Copy Fields</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Connection</h2>
+    <p style="font-size:0.85rem; color:var(--text-light); margin-bottom:12px;">
+      Connected to Google Sheet. To disconnect and use a different sheet, click below.
+    </p>
+    <button class="btn btn-danger" onclick="disconnect()">Disconnect</button>
+  </div>
+</div>
+
+</div><!-- end mainApp -->
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <h2>Edit Record</h2>
+
+    <div class="form-group">
+      <label for="editCrop">Crop</label>
+      <select id="editCrop" onchange="onEditCropChange()">
+        <option value="Ryelage">Ryelage</option>
+        <option value="Haylage">Haylage</option>
+        <option value="Silage">Silage</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="editCutGroup" style="display:none;">
+      <label for="editCut">Cut Number</label>
+      <select id="editCut">
+        <option value="1">1st Cut</option>
+        <option value="2">2nd Cut</option>
+        <option value="3">3rd Cut</option>
+        <option value="4">4th Cut</option>
+        <option value="5">5th Cut</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="editField">Field</label>
+      <select id="editField"></select>
+    </div>
+
+    <div class="form-group">
+      <label for="editDate">Date Harvested</label>
+      <input type="date" id="editDate">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="editWet">Wet Weight (g)</label>
+        <input type="number" id="editWet" step="0.1" min="0" oninput="calcEditDM()">
+      </div>
+      <div class="form-group">
+        <label for="editDry">Dry Weight (g)</label>
+        <input type="number" id="editDry" step="0.1" min="0" oninput="calcEditDM()">
+      </div>
+    </div>
+
+    <div class="edit-dm-preview" id="editDmPreview">Dry Matter: --%</div>
+
+    <div class="modal-buttons">
+      <button class="btn btn-cancel" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-primary" style="width:auto;" onclick="saveEditRecord()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div><span class="spinner"></span> Syncing with Google Sheets...</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ─── CONFIG ──────────────────────────────────────────────────
+  const CONFIG_KEY = 'oakbasin_config';
+  let API_URL = '';
+
+  // ─── DATA (in-memory, synced from Google Sheets) ──────────────
+  let appData = { fields: {}, records: [] };
+
+  // ─── API HELPER (JSONP - works from any origin) ─────────────
+  let jsonpCounter = 0;
+
+  function apiCall(action, params = {}) {
+    return new Promise((resolve, reject) => {
+      const callbackName = '_oakbasin_cb_' + (++jsonpCounter) + '_' + Date.now();
+      const timeout = setTimeout(() => {
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+        reject(new Error('Request timed out'));
+      }, 30000);
+
+      window[callbackName] = function(data) {
+        clearTimeout(timeout);
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+        if (data.error) reject(new Error(data.error));
+        else resolve(data);
+      };
+
+      const url = new URL(API_URL);
+      url.searchParams.set('action', action);
+      url.searchParams.set('callback', callbackName);
+      Object.keys(params).forEach(k => url.searchParams.set(k, params[k]));
+
+      const script = document.createElement('script');
+      script.src = url.toString();
+      script.onerror = () => {
+        clearTimeout(timeout);
+        delete window[callbackName];
+        reject(new Error('Network error'));
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  function showLoading() { document.getElementById('loadingOverlay').classList.add('show'); }
+  function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
+
+  // ─── SETUP / CONNECTION ─────────────────────────────────────
+  function loadConfig() {
+    try {
+      const raw = localStorage.getItem(CONFIG_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    return {};
+  }
+
+  function saveConfig(config) {
+    localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+  }
+
+  async function connectToSheet() {
+    const url = document.getElementById('apiUrlInput').value.trim();
+    const errEl = document.getElementById('setupError');
+    errEl.style.display = 'none';
+
+    if (!url) { errEl.textContent = 'Please enter a URL.'; errEl.style.display = ''; return; }
+
+    try {
+      errEl.textContent = 'Connecting...';
+      errEl.style.display = '';
+      errEl.style.color = 'var(--primary)';
+
+      // Temporarily set API_URL so apiCall works
+      API_URL = url;
+      const data = await apiCall('ping');
+
+      if (!data.success) throw new Error('Connection failed');
+
+      saveConfig({ apiUrl: url });
+      startApp();
+    } catch(e) {
+      API_URL = '';
+      errEl.style.color = 'var(--danger)';
+      errEl.textContent = 'Could not connect. Check the URL and try again.';
+      errEl.style.display = '';
+    }
+  }
+
+  function disconnect() {
+    if (!confirm('Disconnect from Google Sheet? You will need to re-enter the URL to reconnect.')) return;
+    localStorage.removeItem(CONFIG_KEY);
+    API_URL = '';
+    document.getElementById('mainApp').style.display = 'none';
+    document.getElementById('setupScreen').style.display = '';
+  }
+
+  // ─── DATA NORMALIZATION ──────────────────────────────────────
+  // Google Sheets can return data in unexpected formats (numbers vs strings,
+  // date objects, etc). This normalizes everything to consistent types.
+  function normalizeRecords(records) {
+    return records.map(r => {
+      // Ensure year is a clean string like "2025"
+      let year = String(r.year || '').trim();
+      // If year looks like a float (2025.0) strip the decimal
+      if (year.includes('.')) year = year.split('.')[0];
+      // If still not a valid 4-digit year, try to extract from date
+      if (!/^\d{4}$/.test(year) && r.date) {
+        const dateStr = String(r.date);
+        const match = dateStr.match(/(\d{4})/);
+        if (match) year = match[1];
+      }
+
+      return {
+        id: r.id,
+        year: year,
+        crop: String(r.crop || ''),
+        cut: String(r.cut || ''),
+        field: String(r.field || ''),
+        date: String(r.date || ''),
+        wetWeight: parseFloat(r.wetWeight) || 0,
+        dryWeight: parseFloat(r.dryWeight) || 0,
+        dmPercent: parseFloat(r.dmPercent) || 0
+      };
+    }).filter(r => /^\d{4}$/.test(r.year)); // drop any records with invalid years
+  }
+
+  function normalizeFields(fields) {
+    const normalized = {};
+    Object.keys(fields).forEach(year => {
+      let cleanYear = String(year).trim();
+      if (cleanYear.includes('.')) cleanYear = cleanYear.split('.')[0];
+      if (/^\d{4}$/.test(cleanYear)) {
+        normalized[cleanYear] = fields[year];
+      }
+    });
+    return normalized;
+  }
+
+  // ─── DATA SYNC ───────────────────────────────────────────────
+  async function refreshData() {
+    showLoading();
+    try {
+      // Run calls sequentially (JSONP can be unreliable in parallel)
+      const fieldResult = await apiCall('getFields');
+      appData.fields = normalizeFields(fieldResult.fields || {});
+
+      const recResult = await apiCall('getRecords');
+      appData.records = normalizeRecords(recResult.records || []);
+
+      // Cache locally for offline fallback
+      localStorage.setItem('oakbasin_cache', JSON.stringify(appData));
+      setConnected(true);
+      toast('Loaded ' + appData.records.length + ' records.');
+    } catch(e) {
+      console.warn('Refresh failed:', e);
+      setConnected(false);
+      // Try loading from cache
+      try {
+        const cached = JSON.parse(localStorage.getItem('oakbasin_cache'));
+        if (cached && (cached.records.length > 0 || Object.keys(cached.fields).length > 0)) {
+          appData = cached;
+          toast('Offline — showing ' + appData.records.length + ' cached records.');
+        } else {
+          toast('Could not load data. Check your connection.');
+        }
+      } catch(ce) {
+        toast('Could not load data. Check your connection.');
+      }
+    }
+    hideLoading();
+    initYearSelector();
+    refreshAll();
+  }
+
+  function setConnected(online) {
+    const dot = document.getElementById('connDot');
+    const label = document.getElementById('connLabel');
+    if (online) {
+      dot.className = 'conn-dot online';
+      label.textContent = 'Connected';
+    } else {
+      dot.className = 'conn-dot offline';
+      label.textContent = 'Offline (cached)';
+    }
+  }
+
+  // ─── YEAR SELECTOR ───────────────────────────────────────────
+  function getActiveYear() {
+    return document.getElementById('activeYear').value;
+  }
+
+  function initYearSelector() {
+    const sel = document.getElementById('activeYear');
+    const savedYear = localStorage.getItem('oakbasin_year');
+    const currentYear = new Date().getFullYear();
+    const years = new Set();
+    years.add(currentYear);
+    years.add(2025);
+    years.add(currentYear + 1);
+
+    Object.keys(appData.fields).forEach(y => { const n = parseInt(y); if (!isNaN(n)) years.add(n); });
+    appData.records.forEach(r => { const n = parseInt(r.year); if (!isNaN(n)) years.add(n); });
+
+    const sorted = [...years].filter(y => !isNaN(y)).sort((a, b) => b - a);
+    const defaultYear = savedYear && sorted.includes(parseInt(savedYear)) ? parseInt(savedYear) : currentYear;
+    sel.innerHTML = sorted.map(y => `<option value="${y}" ${y === defaultYear ? 'selected' : ''}>${y}</option>`).join('');
+
+    sel.onchange = () => {
+      localStorage.setItem('oakbasin_year', sel.value);
+      refreshAll();
+    };
+  }
+
+  function ensureYearFields(year) {
+    if (!appData.fields[year]) {
+      appData.fields[year] = { Ryelage: [], Haylage: [], Silage: [] };
+    }
+  }
+
+  // ─── NAVIGATION ──────────────────────────────────────────────
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('nav button')[['record','view','settings'].indexOf(name)].classList.add('active');
+
+    if (name === 'view') renderRecords();
+    if (name === 'settings') renderSettings();
+  }
+
+  // ─── RECORD FORM ─────────────────────────────────────────────
+  function onCropChange() {
+    const crop = document.getElementById('cropSelect').value;
+    const cutGroup = document.getElementById('cutGroup');
+    const fieldSelect = document.getElementById('fieldSelect');
+
+    cutGroup.style.display = crop === 'Haylage' ? '' : 'none';
+
+    if (!crop) {
+      fieldSelect.innerHTML = '<option value="">-- Select Crop First --</option>';
+      return;
+    }
+
+    const year = getActiveYear();
+    ensureYearFields(year);
+    const fields = appData.fields[year][crop] || [];
+
+    if (fields.length === 0) {
+      fieldSelect.innerHTML = '<option value="">-- No fields configured. Go to Settings. --</option>';
+    } else {
+      fieldSelect.innerHTML = '<option value="">-- Select Field --</option>' +
+        fields.map(f => `<option value="${f}">${f}</option>`).join('');
+    }
+  }
+
+  function calcDM(wet, dry) {
+    return parseFloat(((dry - (wet - 100)) / 100 * 100).toFixed(1));
+  }
+
+  function calcDryMatter() {
+    const wet = parseFloat(document.getElementById('wetWeight').value);
+    const dry = parseFloat(document.getElementById('dryWeight').value);
+    const el = document.getElementById('dmResult');
+
+    if (wet > 0 && dry > 0) {
+      const pct = calcDM(wet, dry);
+      el.textContent = `Dry Matter: ${pct}%`;
+      if (pct < 15 || pct > 80) {
+        el.style.background = '#fff3cd';
+        el.style.borderColor = '#ffc107';
+        el.style.color = '#856404';
+        el.textContent += '  (Check weights?)';
+      } else {
+        el.style.background = '#f0faf4';
+        el.style.borderColor = '#b7e4c7';
+        el.style.color = 'var(--primary-dark)';
+      }
+    } else {
+      el.textContent = 'Dry Matter: --%';
+      el.style.background = '#f0faf4';
+      el.style.borderColor = '#b7e4c7';
+      el.style.color = 'var(--primary-dark)';
+    }
+  }
+
+  async function saveRecord() {
+    const crop = document.getElementById('cropSelect').value;
+    const cut = crop === 'Haylage' ? document.getElementById('cutSelect').value : '';
+    const field = document.getElementById('fieldSelect').value;
+    const date = document.getElementById('dateInput').value;
+    const wet = parseFloat(document.getElementById('wetWeight').value);
+    const dry = parseFloat(document.getElementById('dryWeight').value);
+
+    if (!crop) return toast('Please select a crop.');
+    if (!field) return toast('Please select a field.');
+    if (!date) return toast('Please enter the date harvested.');
+    if (!wet || wet <= 0) return toast('Please enter a valid wet weight.');
+    if (!dry || dry <= 0) return toast('Please enter a valid dry weight.');
+
+    const record = {
+      id: Date.now(),
+      year: getActiveYear(),
+      crop,
+      cut,
+      field,
+      date,
+      wetWeight: wet,
+      dryWeight: dry,
+      dmPercent: calcDM(wet, dry)
+    };
+
+    const btn = document.getElementById('saveBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Saving...';
+
+    try {
+      await apiCall('addRecord', { data: JSON.stringify(record) });
+      appData.records.push(record);
+      localStorage.setItem('oakbasin_cache', JSON.stringify(appData));
+
+      // Reset form
+      document.getElementById('cropSelect').value = '';
+      document.getElementById('cutGroup').style.display = 'none';
+      document.getElementById('fieldSelect').innerHTML = '<option value="">-- Select Crop First --</option>';
+      document.getElementById('dateInput').valueAsDate = new Date();
+      document.getElementById('wetWeight').value = '';
+      document.getElementById('dryWeight').value = '';
+      document.getElementById('dmResult').textContent = 'Dry Matter: --%';
+      document.getElementById('dmResult').style.background = '#f0faf4';
+      document.getElementById('dmResult').style.borderColor = '#b7e4c7';
+      document.getElementById('dmResult').style.color = 'var(--primary-dark)';
+
+      toast('Record saved!');
+      setConnected(true);
+    } catch(e) {
+      toast('Error saving. Check your connection.');
+      setConnected(false);
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Save Record';
+  }
+
+  // ─── VIEW RECORDS ─────────────────────────────────────────────
+  function renderRecords() {
+    const year = getActiveYear();
+    const filterCrop = document.getElementById('filterCrop').value;
+    const filterField = document.getElementById('filterField').value;
+
+    const allFields = new Set();
+    appData.records.filter(r => String(r.year) === year).forEach(r => allFields.add(r.field));
+    const fieldSel = document.getElementById('filterField');
+    const currentVal = fieldSel.value;
+    fieldSel.innerHTML = '<option value="">All Fields</option>' +
+      [...allFields].sort().map(f => `<option value="${f}">${f}</option>`).join('');
+    fieldSel.value = currentVal;
+
+    let records = appData.records
+      .filter(r => String(r.year) === year)
+      .filter(r => !filterCrop || r.crop === filterCrop)
+      .filter(r => !filterField || r.field === filterField)
+      .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+    const tbody = document.getElementById('recordsBody');
+    const empty = document.getElementById('emptyState');
+
+    if (records.length === 0) {
+      tbody.innerHTML = '';
+      empty.style.display = '';
+      return;
+    }
+
+    empty.style.display = 'none';
+    tbody.innerHTML = records.map(r => `
+      <tr>
+        <td>${formatDate(r.date)}</td>
+        <td>${r.crop}</td>
+        <td>${r.cut || '-'}</td>
+        <td>${r.field}</td>
+        <td class="num">${r.wetWeight}</td>
+        <td class="num">${r.dryWeight}</td>
+        <td class="num" style="font-weight:600;">${r.dmPercent}%</td>
+        <td><div class="record-actions"><button class="edit-record" title="Edit" onclick="openEditModal(${r.id})">Edit</button><button class="delete-record" title="Delete" onclick="deleteRecord(${r.id})">&#x2715;</button></div></td>
+      </tr>
+    `).join('');
+  }
+
+  function formatDate(d) {
+    if (!d) return '';
+    const parts = d.split('-');
+    if (parts.length !== 3) return d;
+    return `${parts[1]}/${parts[2]}/${parts[0]}`;
+  }
+
+  async function deleteRecord(id) {
+    if (!confirm('Delete this record?')) return;
+    showLoading();
+    try {
+      await apiCall('deleteRecord', { id: String(id) });
+      appData.records = appData.records.filter(r => r.id !== id && String(r.id) !== String(id));
+      localStorage.setItem('oakbasin_cache', JSON.stringify(appData));
+      renderRecords();
+      toast('Record deleted.');
+    } catch(e) {
+      toast('Error deleting record.');
+    }
+    hideLoading();
+  }
+
+  // ─── CSV EXPORT ──────────────────────────────────────────────
+  function exportCSV() {
+    const year = getActiveYear();
+    const filterCrop = document.getElementById('filterCrop').value;
+    const filterField = document.getElementById('filterField').value;
+
+    let records = appData.records
+      .filter(r => String(r.year) === year)
+      .filter(r => !filterCrop || r.crop === filterCrop)
+      .filter(r => !filterField || r.field === filterField)
+      .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+
+    if (records.length === 0) return toast('No records to export.');
+
+    const header = 'Date,Crop,Cut,Field,Wet Weight (g),Dry Weight (g),Dry Matter %';
+    const rows = records.map(r =>
+      `${r.date},${r.crop},${r.cut || ''},${csvEscape(r.field)},${r.wetWeight},${r.dryWeight},${r.dmPercent}`
+    );
+
+    const csv = [header, ...rows].join('\n');
+    downloadFile(`OakBasin_DryMatter_${year}.csv`, csv, 'text/csv');
+    toast('CSV exported!');
+  }
+
+  function csvEscape(val) {
+    val = String(val);
+    if (val.includes(',') || val.includes('"')) return `"${val.replace(/"/g, '""')}"`;
+    return val;
+  }
+
+  // ─── FIELD SETTINGS ──────────────────────────────────────────
+  function renderSettings() {
+    const year = getActiveYear();
+    ensureYearFields(year);
+    document.getElementById('settingsYearLabel').textContent = year;
+
+    ['Ryelage', 'Haylage', 'Silage'].forEach(crop => {
+      const list = document.getElementById('fields-' + crop);
+      const fields = appData.fields[year][crop] || [];
+      list.innerHTML = fields.map((f, i) =>
+        `<li><span>${f}</span><button class="btn-danger" onclick="removeField('${crop}', '${f.replace(/'/g, "\\'")}')">Remove</button></li>`
+      ).join('');
+      if (fields.length === 0) list.innerHTML = '<li style="color:var(--text-light);border:none;font-style:italic;">No fields added yet.</li>';
+    });
+
+    const copyYearSel = document.getElementById('copyFromYear');
+    const years = Object.keys(appData.fields).filter(y => y !== year).sort((a, b) => b - a);
+    copyYearSel.innerHTML = years.length
+      ? years.map(y => `<option value="${y}">${y}</option>`).join('')
+      : '<option value="">No other years</option>';
+  }
+
+  async function addField(crop) {
+    const input = document.getElementById('newField-' + crop);
+    const name = input.value.trim();
+    if (!name) return;
+
+    const year = getActiveYear();
+    ensureYearFields(year);
+
+    if (appData.fields[year][crop].includes(name)) {
+      return toast('Field already exists.');
+    }
+
+    try {
+      await apiCall('addField', { data: JSON.stringify({ year, crop, fieldName: name }) });
+      appData.fields[year][crop].push(name);
+      appData.fields[year][crop].sort();
+      localStorage.setItem('oakbasin_cache', JSON.stringify(appData));
+      input.value = '';
+      renderSettings();
+      toast(`"${name}" added to ${crop}.`);
+    } catch(e) {
+      toast('Error adding field.');
+    }
+  }
+
+  async function removeField(crop, fieldName) {
+    if (!confirm(`Remove "${fieldName}" from ${crop} fields?`)) return;
+    const year = getActiveYear();
+
+    try {
+      await apiCall('removeField', { data: JSON.stringify({ year, crop, fieldName }) });
+      appData.fields[year][crop] = appData.fields[year][crop].filter(f => f !== fieldName);
+      localStorage.setItem('oakbasin_cache', JSON.stringify(appData));
+      renderSettings();
+      toast(`"${fieldName}" removed.`);
+    } catch(e) {
+      toast('Error removing field.');
+    }
+  }
+
+  async function copyFieldsFromYear() {
+    const fromYear = document.getElementById('copyFromYear').value;
+    if (!fromYear) return toast('No year to copy from.');
+    const toYear = getActiveYear();
+
+    if (!confirm(`Copy all field assignments from ${fromYear} to ${toYear}?`)) return;
+
+    ensureYearFields(toYear);
+    const toAdd = [];
+
+    ['Ryelage', 'Haylage', 'Silage'].forEach(crop => {
+      const existing = new Set(appData.fields[toYear][crop]);
+      (appData.fields[fromYear][crop] || []).forEach(f => {
+        if (!existing.has(f)) {
+          toAdd.push({ year: toYear, crop, fieldName: f });
+          existing.add(f);
+        }
+      });
+      appData.fields[toYear][crop] = [...existing].sort();
+    });
+
+    showLoading();
+    try {
+      // Add all new fields to Google Sheet
+      for (const item of toAdd) {
+        await apiCall('addField', { data: JSON.stringify(item) });
+      }
+      localStorage.setItem('oakbasin_cache', JSON.stringify(appData));
+      renderSettings();
+      toast(`Fields copied from ${fromYear}.`);
+    } catch(e) {
+      toast('Error copying fields.');
+    }
+    hideLoading();
+  }
+
+  // ─── EDIT RECORD MODAL ─────────────────────────────────────────
+  let editingRecordId = null;
+
+  function openEditModal(id) {
+    const record = appData.records.find(r => r.id === id || String(r.id) === String(id));
+    if (!record) return;
+
+    editingRecordId = record.id;
+
+    document.getElementById('editCrop').value = record.crop;
+    onEditCropChange();
+    document.getElementById('editField').value = record.field;
+    document.getElementById('editDate').value = record.date;
+    document.getElementById('editWet').value = record.wetWeight;
+    document.getElementById('editDry').value = record.dryWeight;
+
+    if (record.crop === 'Haylage') {
+      document.getElementById('editCut').value = record.cut;
+    }
+
+    calcEditDM();
+    document.getElementById('editModal').classList.add('show');
+  }
+
+  function closeEditModal() {
+    document.getElementById('editModal').classList.remove('show');
+    editingRecordId = null;
+  }
+
+  function onEditCropChange() {
+    const crop = document.getElementById('editCrop').value;
+    document.getElementById('editCutGroup').style.display = crop === 'Haylage' ? '' : 'none';
+
+    const year = getActiveYear();
+    ensureYearFields(year);
+    const fields = appData.fields[year][crop] || [];
+    const fieldSel = document.getElementById('editField');
+
+    if (fields.length === 0) {
+      fieldSel.innerHTML = '<option value="">-- No fields configured --</option>';
+    } else {
+      fieldSel.innerHTML = fields.map(f => `<option value="${f}">${f}</option>`).join('');
+    }
+  }
+
+  function calcEditDM() {
+    const wet = parseFloat(document.getElementById('editWet').value);
+    const dry = parseFloat(document.getElementById('editDry').value);
+    const el = document.getElementById('editDmPreview');
+
+    if (wet > 0 && dry > 0) {
+      const pct = calcDM(wet, dry);
+      el.textContent = `Dry Matter: ${pct}%`;
+      if (pct < 15 || pct > 80) {
+        el.style.background = '#fff3cd';
+        el.style.borderColor = '#ffc107';
+        el.style.color = '#856404';
+        el.textContent += '  (Check weights?)';
+      } else {
+        el.style.background = '#f0faf4';
+        el.style.borderColor = '#b7e4c7';
+        el.style.color = 'var(--primary-dark)';
+      }
+    } else {
+      el.textContent = 'Dry Matter: --%';
+      el.style.background = '#f0faf4';
+      el.style.borderColor = '#b7e4c7';
+      el.style.color = 'var(--primary-dark)';
+    }
+  }
+
+  async function saveEditRecord() {
+    if (!editingRecordId) return;
+
+    const crop = document.getElementById('editCrop').value;
+    const cut = crop === 'Haylage' ? document.getElementById('editCut').value : '';
+    const field = document.getElementById('editField').value;
+    const date = document.getElementById('editDate').value;
+    const wet = parseFloat(document.getElementById('editWet').value);
+    const dry = parseFloat(document.getElementById('editDry').value);
+
+    if (!crop) return toast('Please select a crop.');
+    if (!field) return toast('Please select a field.');
+    if (!date) return toast('Please enter the date harvested.');
+    if (!wet || wet <= 0) return toast('Please enter a valid wet weight.');
+    if (!dry || dry <= 0) return toast('Please enter a valid dry weight.');
+
+    const idx = appData.records.findIndex(r => r.id === editingRecordId || String(r.id) === String(editingRecordId));
+    if (idx === -1) return;
+
+    const updated = {
+      ...appData.records[idx],
+      crop,
+      cut,
+      field,
+      date,
+      wetWeight: wet,
+      dryWeight: dry,
+      dmPercent: calcDM(wet, dry)
+    };
+
+    showLoading();
+    try {
+      await apiCall('updateRecord', { data: JSON.stringify(updated) });
+      appData.records[idx] = updated;
+      localStorage.setItem('oakbasin_cache', JSON.stringify(appData));
+      closeEditModal();
+      renderRecords();
+      toast('Record updated!');
+    } catch(e) {
+      toast('Error updating record.');
+    }
+    hideLoading();
+  }
+
+  document.getElementById('editModal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditModal();
+  });
+
+  // ─── HELPERS ─────────────────────────────────────────────────
+  function downloadFile(filename, content, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2500);
+  }
+
+  function refreshAll() {
+    onCropChange();
+    renderRecords();
+    renderSettings();
+  }
+
+  // ─── APP START ───────────────────────────────────────────────
+  async function startApp() {
+    document.getElementById('setupScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = '';
+    document.getElementById('dateInput').valueAsDate = new Date();
+    await refreshData();
+  }
+
+  // ─── INIT ────────────────────────────────────────────────────
+  (function init() {
+    const config = loadConfig();
+    if (config.apiUrl) {
+      API_URL = config.apiUrl;
+      startApp();
+    } else {
+      document.getElementById('setupScreen').style.display = '';
+    }
+  })();
+</script>
+
+</body>
+</html>
