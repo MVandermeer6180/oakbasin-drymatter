@@ -19,16 +19,16 @@
     --danger-light: #e5383b;
     --success: #2d6a4f;
   }
-
+ 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
   }
-
+ 
   header {
     background: var(--primary-dark);
     color: white;
@@ -38,10 +38,10 @@
     justify-content: space-between;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   }
-
+ 
   header h1 { font-size: 1.3rem; font-weight: 600; }
   header .subtitle { font-size: 0.85rem; opacity: 0.8; margin-top: 2px; }
-
+ 
   .year-selector {
     display: flex;
     align-items: center;
@@ -49,7 +49,7 @@
     color: white;
     font-size: 0.9rem;
   }
-
+ 
   .year-selector select {
     padding: 4px 8px;
     border-radius: 4px;
@@ -58,15 +58,15 @@
     color: white;
     font-size: 0.9rem;
   }
-
+ 
   .year-selector select option { color: var(--text); background: white; }
-
+ 
   .conn-status {
     font-size: 0.75rem;
     opacity: 0.8;
     margin-top: 2px;
   }
-
+ 
   .conn-dot {
     display: inline-block;
     width: 8px;
@@ -75,16 +75,16 @@
     margin-right: 4px;
     vertical-align: middle;
   }
-
+ 
   .conn-dot.online { background: #52b788; }
   .conn-dot.offline { background: #e5383b; }
-
+ 
   nav {
     display: flex;
     background: var(--primary);
     border-bottom: 2px solid var(--primary-dark);
   }
-
+ 
   nav button {
     flex: 1;
     padding: 12px 16px;
@@ -97,17 +97,17 @@
     transition: all 0.2s;
     border-bottom: 3px solid transparent;
   }
-
+ 
   nav button:hover { color: white; background: rgba(255,255,255,0.05); }
   nav button.active {
     color: white;
     border-bottom-color: var(--accent);
     background: rgba(255,255,255,0.1);
   }
-
+ 
   .page { display: none; padding: 20px; max-width: 700px; margin: 0 auto; }
   .page.active { display: block; }
-
+ 
   .card {
     background: var(--card);
     border-radius: 8px;
@@ -116,7 +116,7 @@
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     border: 1px solid var(--border);
   }
-
+ 
   .card h2 {
     font-size: 1.1rem;
     margin-bottom: 16px;
@@ -124,9 +124,9 @@
     border-bottom: 1px solid var(--border);
     padding-bottom: 8px;
   }
-
+ 
   .form-group { margin-bottom: 14px; }
-
+ 
   .form-group label {
     display: block;
     font-size: 0.85rem;
@@ -134,7 +134,7 @@
     margin-bottom: 4px;
     color: var(--text-light);
   }
-
+ 
   .form-group select,
   .form-group input {
     width: 100%;
@@ -144,20 +144,20 @@
     font-size: 1rem;
     transition: border-color 0.2s;
   }
-
+ 
   .form-group select:focus,
   .form-group input:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 2px rgba(45,106,79,0.15);
   }
-
+ 
   .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
   }
-
+ 
   .btn {
     padding: 10px 20px;
     border: none;
@@ -167,13 +167,13 @@
     cursor: pointer;
     transition: all 0.2s;
   }
-
+ 
   .btn-primary { background: var(--primary); color: white; width: 100%; }
   .btn-primary:hover { background: var(--primary-light); }
   .btn-primary:disabled { background: #999; cursor: not-allowed; }
   .btn-secondary { background: var(--accent); color: var(--primary-dark); }
   .btn-secondary:hover { opacity: 0.85; }
-
+ 
   .btn-danger {
     background: transparent;
     color: var(--danger);
@@ -181,10 +181,10 @@
     padding: 6px 12px;
     font-size: 0.8rem;
   }
-
+ 
   .btn-danger:hover { background: var(--danger); color: white; }
   .btn-small { padding: 6px 14px; font-size: 0.85rem; }
-
+ 
   .dry-matter-result {
     background: #f0faf4;
     border: 1px solid #b7e4c7;
@@ -196,7 +196,7 @@
     font-weight: 700;
     color: var(--primary-dark);
   }
-
+ 
   /* Records table */
   .records-controls {
     display: flex;
@@ -205,7 +205,7 @@
     flex-wrap: wrap;
     margin-bottom: 12px;
   }
-
+ 
   .records-controls select,
   .records-controls input {
     padding: 8px 10px;
@@ -213,9 +213,9 @@
     border-radius: 6px;
     font-size: 0.9rem;
   }
-
+ 
   table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-
+ 
   thead th {
     background: var(--primary-dark);
     color: white;
@@ -224,22 +224,22 @@
     font-weight: 600;
     white-space: nowrap;
   }
-
+ 
   tbody tr { border-bottom: 1px solid var(--border); }
   tbody tr:hover { background: #f0faf4; }
   tbody td { padding: 8px; }
   tbody td.num { text-align: right; font-variant-numeric: tabular-nums; }
-
+ 
   .empty-state {
     text-align: center;
     color: var(--text-light);
     padding: 40px 20px;
     font-size: 0.95rem;
   }
-
+ 
   /* Settings */
   .field-list { list-style: none; margin-top: 8px; }
-
+ 
   .field-list li {
     display: flex;
     align-items: center;
@@ -250,13 +250,13 @@
     margin-bottom: 4px;
     font-size: 0.9rem;
   }
-
+ 
   .add-field-row { display: flex; gap: 8px; margin-top: 8px; }
   .add-field-row input { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 4px; }
-
+ 
   .crop-section { margin-bottom: 20px; }
   .crop-section h3 { font-size: 0.95rem; color: var(--primary); margin-bottom: 6px; }
-
+ 
   .toast {
     position: fixed;
     bottom: 20px;
@@ -274,9 +274,9 @@
     max-width: 90%;
     text-align: center;
   }
-
+ 
   .toast.show { opacity: 1; }
-
+ 
   .delete-record {
     background: none;
     border: none;
@@ -285,9 +285,9 @@
     font-size: 1.1rem;
     padding: 2px 6px;
   }
-
+ 
   .delete-record:hover { color: var(--danger-light); }
-
+ 
   .edit-record {
     background: none;
     border: none;
@@ -297,10 +297,10 @@
     padding: 2px 6px;
     font-weight: 600;
   }
-
+ 
   .edit-record:hover { color: var(--primary-light); text-decoration: underline; }
   .record-actions { display: flex; gap: 4px; align-items: center; white-space: nowrap; }
-
+ 
   /* Edit Modal */
   .modal-overlay {
     display: none;
@@ -311,9 +311,9 @@
     justify-content: center;
     align-items: center;
   }
-
+ 
   .modal-overlay.show { display: flex; }
-
+ 
   .modal {
     background: var(--card);
     border-radius: 10px;
@@ -324,7 +324,7 @@
     overflow-y: auto;
     box-shadow: 0 8px 32px rgba(0,0,0,0.2);
   }
-
+ 
   .modal h2 {
     font-size: 1.1rem;
     margin-bottom: 16px;
@@ -332,12 +332,12 @@
     border-bottom: 1px solid var(--border);
     padding-bottom: 8px;
   }
-
+ 
   .modal-buttons { display: flex; gap: 10px; margin-top: 16px; }
   .modal-buttons .btn { flex: 1; }
   .btn-cancel { background: var(--border); color: var(--text); }
   .btn-cancel:hover { background: #bbb; }
-
+ 
   .edit-dm-preview {
     background: #f0faf4;
     border: 1px solid #b7e4c7;
@@ -349,7 +349,7 @@
     color: var(--primary-dark);
     margin-top: 8px;
   }
-
+ 
   /* Setup screen */
   .setup-screen {
     display: flex;
@@ -358,7 +358,7 @@
     min-height: 80vh;
     padding: 20px;
   }
-
+ 
   .setup-card {
     background: var(--card);
     border-radius: 12px;
@@ -369,12 +369,12 @@
     border: 1px solid var(--border);
     text-align: center;
   }
-
+ 
   .setup-card h2 { color: var(--primary-dark); margin-bottom: 8px; border: none; padding: 0; }
   .setup-card p { color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px; }
   .setup-card input { margin-bottom: 12px; }
   .setup-error { color: var(--danger); font-size: 0.85rem; margin-top: 8px; }
-
+ 
   /* Loading spinner */
   .spinner {
     display: inline-block;
@@ -387,9 +387,9 @@
     vertical-align: middle;
     margin-right: 6px;
   }
-
+ 
   @keyframes spin { to { transform: rotate(360deg); } }
-
+ 
   .loading-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -402,9 +402,9 @@
     color: var(--primary-dark);
     font-weight: 600;
   }
-
+ 
   .loading-overlay.show { display: flex; }
-
+ 
   @media (max-width: 600px) {
     .form-row { grid-template-columns: 1fr; }
     header { flex-direction: column; gap: 8px; align-items: flex-start; }
@@ -416,7 +416,7 @@
 </style>
 </head>
 <body>
-
+ 
 <!-- SETUP SCREEN (shown if no API URL configured) -->
 <div id="setupScreen" class="setup-screen" style="display:none;">
   <div class="setup-card">
@@ -430,10 +430,10 @@
     <div id="setupError" class="setup-error" style="display:none;"></div>
   </div>
 </div>
-
+ 
 <!-- MAIN APP (hidden until connected) -->
 <div id="mainApp" style="display:none;">
-
+ 
 <header>
   <div>
     <h1>Oak Basin Dairy</h1>
@@ -448,18 +448,18 @@
     <select id="activeYear"></select>
   </div>
 </header>
-
+ 
 <nav>
   <button class="active" onclick="showPage('record')">New Record</button>
   <button onclick="showPage('view')">View Records</button>
   <button onclick="showPage('settings')">Settings</button>
 </nav>
-
+ 
 <!-- NEW RECORD PAGE -->
 <div id="page-record" class="page active">
   <div class="card">
     <h2>Record Dry Matter</h2>
-
+ 
     <div class="form-group">
       <label for="cropSelect">Crop</label>
       <select id="cropSelect" onchange="onCropChange()">
@@ -469,7 +469,7 @@
         <option value="Silage">Silage</option>
       </select>
     </div>
-
+ 
     <div class="form-group" id="cutGroup" style="display:none;">
       <label for="cutSelect">Cut Number</label>
       <select id="cutSelect">
@@ -480,19 +480,25 @@
         <option value="5">5th Cut</option>
       </select>
     </div>
-
+ 
     <div class="form-group">
       <label for="fieldSelect">Field</label>
       <select id="fieldSelect">
         <option value="">-- Select Crop First --</option>
       </select>
     </div>
-
-    <div class="form-group">
-      <label for="dateInput">Date Harvested</label>
-      <input type="date" id="dateInput">
+ 
+    <div class="form-row">
+      <div class="form-group">
+        <label for="dateInput">Date Harvested</label>
+        <input type="date" id="dateInput">
+      </div>
+      <div class="form-group">
+        <label for="timeInput">Sample Time</label>
+        <input type="time" id="timeInput">
+      </div>
     </div>
-
+ 
     <div class="form-row">
       <div class="form-group">
         <label for="wetWeight">Wet Weight (g)</label>
@@ -503,19 +509,19 @@
         <input type="number" id="dryWeight" step="0.1" min="0" placeholder="e.g. 35" oninput="calcDryMatter()">
       </div>
     </div>
-
+ 
     <div class="dry-matter-result" id="dmResult">Dry Matter: --%</div>
-
+ 
     <br>
     <button class="btn btn-primary" id="saveBtn" onclick="saveRecord()">Save Record</button>
   </div>
 </div>
-
+ 
 <!-- VIEW RECORDS PAGE -->
 <div id="page-view" class="page">
   <div class="card">
     <h2>Recorded Dry Matters</h2>
-
+ 
     <div class="records-controls">
       <select id="filterCrop" onchange="renderRecords()">
         <option value="">All Crops</option>
@@ -530,12 +536,13 @@
       <button class="btn btn-secondary btn-small" onclick="refreshData()">Refresh</button>
       <button class="btn btn-secondary btn-small" onclick="exportCSV()">Export CSV</button>
     </div>
-
+ 
     <div style="overflow-x:auto;">
       <table>
         <thead>
           <tr>
             <th>Date</th>
+            <th>Time</th>
             <th>Crop</th>
             <th>Cut</th>
             <th>Field</th>
@@ -554,7 +561,7 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- SETTINGS PAGE -->
 <div id="page-settings" class="page">
   <div class="card">
@@ -562,7 +569,7 @@
     <p style="font-size:0.85rem; color:var(--text-light); margin-bottom:16px;">
       Add or remove field names for each crop type. Fields are saved per year so you can update them annually.
     </p>
-
+ 
     <div class="crop-section">
       <h3>Ryelage Fields</h3>
       <ul class="field-list" id="fields-Ryelage"></ul>
@@ -571,7 +578,7 @@
         <button class="btn btn-secondary btn-small" onclick="addField('Ryelage')">Add</button>
       </div>
     </div>
-
+ 
     <div class="crop-section">
       <h3>Haylage Fields</h3>
       <ul class="field-list" id="fields-Haylage"></ul>
@@ -580,7 +587,7 @@
         <button class="btn btn-secondary btn-small" onclick="addField('Haylage')">Add</button>
       </div>
     </div>
-
+ 
     <div class="crop-section">
       <h3>Silage Fields</h3>
       <ul class="field-list" id="fields-Silage"></ul>
@@ -590,7 +597,7 @@
       </div>
     </div>
   </div>
-
+ 
   <div class="card">
     <h2>Copy Fields from Another Year</h2>
     <p style="font-size:0.85rem; color:var(--text-light); margin-bottom:12px;">
@@ -601,7 +608,7 @@
       <button class="btn btn-secondary btn-small" onclick="copyFieldsFromYear()">Copy Fields</button>
     </div>
   </div>
-
+ 
   <div class="card">
     <h2>Connection</h2>
     <p style="font-size:0.85rem; color:var(--text-light); margin-bottom:12px;">
@@ -610,14 +617,14 @@
     <button class="btn btn-danger" onclick="disconnect()">Disconnect</button>
   </div>
 </div>
-
+ 
 </div><!-- end mainApp -->
-
+ 
 <!-- EDIT MODAL -->
 <div class="modal-overlay" id="editModal">
   <div class="modal">
     <h2>Edit Record</h2>
-
+ 
     <div class="form-group">
       <label for="editCrop">Crop</label>
       <select id="editCrop" onchange="onEditCropChange()">
@@ -626,7 +633,7 @@
         <option value="Silage">Silage</option>
       </select>
     </div>
-
+ 
     <div class="form-group" id="editCutGroup" style="display:none;">
       <label for="editCut">Cut Number</label>
       <select id="editCut">
@@ -637,17 +644,23 @@
         <option value="5">5th Cut</option>
       </select>
     </div>
-
+ 
     <div class="form-group">
       <label for="editField">Field</label>
       <select id="editField"></select>
     </div>
-
-    <div class="form-group">
-      <label for="editDate">Date Harvested</label>
-      <input type="date" id="editDate">
+ 
+    <div class="form-row">
+      <div class="form-group">
+        <label for="editDate">Date Harvested</label>
+        <input type="date" id="editDate">
+      </div>
+      <div class="form-group">
+        <label for="editTime">Sample Time</label>
+        <input type="time" id="editTime">
+      </div>
     </div>
-
+ 
     <div class="form-row">
       <div class="form-group">
         <label for="editWet">Wet Weight (g)</label>
@@ -658,33 +671,33 @@
         <input type="number" id="editDry" step="0.1" min="0" oninput="calcEditDM()">
       </div>
     </div>
-
+ 
     <div class="edit-dm-preview" id="editDmPreview">Dry Matter: --%</div>
-
+ 
     <div class="modal-buttons">
       <button class="btn btn-cancel" onclick="closeEditModal()">Cancel</button>
       <button class="btn btn-primary" style="width:auto;" onclick="saveEditRecord()">Save Changes</button>
     </div>
   </div>
 </div>
-
+ 
 <div class="loading-overlay" id="loadingOverlay">
   <div><span class="spinner"></span> Syncing with Google Sheets...</div>
 </div>
-
+ 
 <div class="toast" id="toast"></div>
-
+ 
 <script>
   // ─── CONFIG ──────────────────────────────────────────────────
   const CONFIG_KEY = 'oakbasin_config';
   let API_URL = '';
-
+ 
   // ─── DATA (in-memory, synced from Google Sheets) ──────────────
   let appData = { fields: {}, records: [] };
-
+ 
   // ─── API HELPER (JSONP - works from any origin) ─────────────
   let jsonpCounter = 0;
-
+ 
   function apiCall(action, params = {}) {
     return new Promise((resolve, reject) => {
       const callbackName = '_oakbasin_cb_' + (++jsonpCounter) + '_' + Date.now();
@@ -693,7 +706,7 @@
         if (script.parentNode) script.parentNode.removeChild(script);
         reject(new Error('Request timed out'));
       }, 30000);
-
+ 
       window[callbackName] = function(data) {
         clearTimeout(timeout);
         delete window[callbackName];
@@ -701,12 +714,12 @@
         if (data.error) reject(new Error(data.error));
         else resolve(data);
       };
-
+ 
       const url = new URL(API_URL);
       url.searchParams.set('action', action);
       url.searchParams.set('callback', callbackName);
       Object.keys(params).forEach(k => url.searchParams.set(k, params[k]));
-
+ 
       const script = document.createElement('script');
       script.src = url.toString();
       script.onerror = () => {
@@ -717,10 +730,10 @@
       document.head.appendChild(script);
     });
   }
-
+ 
   function showLoading() { document.getElementById('loadingOverlay').classList.add('show'); }
   function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
-
+ 
   // ─── SETUP / CONNECTION ─────────────────────────────────────
   function loadConfig() {
     try {
@@ -729,29 +742,29 @@
     } catch(e) {}
     return {};
   }
-
+ 
   function saveConfig(config) {
     localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
   }
-
+ 
   async function connectToSheet() {
     const url = document.getElementById('apiUrlInput').value.trim();
     const errEl = document.getElementById('setupError');
     errEl.style.display = 'none';
-
+ 
     if (!url) { errEl.textContent = 'Please enter a URL.'; errEl.style.display = ''; return; }
-
+ 
     try {
       errEl.textContent = 'Connecting...';
       errEl.style.display = '';
       errEl.style.color = 'var(--primary)';
-
+ 
       // Temporarily set API_URL so apiCall works
       API_URL = url;
       const data = await apiCall('ping');
-
+ 
       if (!data.success) throw new Error('Connection failed');
-
+ 
       saveConfig({ apiUrl: url });
       startApp();
     } catch(e) {
@@ -761,7 +774,7 @@
       errEl.style.display = '';
     }
   }
-
+ 
   function disconnect() {
     if (!confirm('Disconnect from Google Sheet? You will need to re-enter the URL to reconnect.')) return;
     localStorage.removeItem(CONFIG_KEY);
@@ -769,7 +782,7 @@
     document.getElementById('mainApp').style.display = 'none';
     document.getElementById('setupScreen').style.display = '';
   }
-
+ 
   // ─── DATA NORMALIZATION ──────────────────────────────────────
   // Google Sheets can return data in unexpected formats (numbers vs strings,
   // date objects, etc). This normalizes everything to consistent types.
@@ -785,7 +798,11 @@
         const match = dateStr.match(/(\d{4})/);
         if (match) year = match[1];
       }
-
+ 
+      // Normalize time - strip seconds if present, handle "HH:MM:SS" -> "HH:MM"
+      let time = String(r.time || '').trim();
+      if (time.length > 5) time = time.substring(0, 5);
+ 
       return {
         id: r.id,
         year: year,
@@ -793,13 +810,14 @@
         cut: String(r.cut || ''),
         field: String(r.field || ''),
         date: String(r.date || ''),
+        time: time,
         wetWeight: parseFloat(r.wetWeight) || 0,
         dryWeight: parseFloat(r.dryWeight) || 0,
         dmPercent: parseFloat(r.dmPercent) || 0
       };
     }).filter(r => /^\d{4}$/.test(r.year)); // drop any records with invalid years
   }
-
+ 
   function normalizeFields(fields) {
     const normalized = {};
     Object.keys(fields).forEach(year => {
@@ -811,7 +829,7 @@
     });
     return normalized;
   }
-
+ 
   // ─── DATA SYNC ───────────────────────────────────────────────
   async function refreshData() {
     showLoading();
@@ -819,10 +837,10 @@
       // Run calls sequentially (JSONP can be unreliable in parallel)
       const fieldResult = await apiCall('getFields');
       appData.fields = normalizeFields(fieldResult.fields || {});
-
+ 
       const recResult = await apiCall('getRecords');
       appData.records = normalizeRecords(recResult.records || []);
-
+ 
       // Cache locally for offline fallback
       localStorage.setItem('oakbasin_cache', JSON.stringify(appData));
       setConnected(true);
@@ -847,7 +865,7 @@
     initYearSelector();
     refreshAll();
   }
-
+ 
   function setConnected(online) {
     const dot = document.getElementById('connDot');
     const label = document.getElementById('connLabel');
@@ -859,12 +877,12 @@
       label.textContent = 'Offline (cached)';
     }
   }
-
+ 
   // ─── YEAR SELECTOR ───────────────────────────────────────────
   function getActiveYear() {
     return document.getElementById('activeYear').value;
   }
-
+ 
   function initYearSelector() {
     const sel = document.getElementById('activeYear');
     const savedYear = localStorage.getItem('oakbasin_year');
@@ -873,54 +891,54 @@
     years.add(currentYear);
     years.add(2025);
     years.add(currentYear + 1);
-
+ 
     Object.keys(appData.fields).forEach(y => { const n = parseInt(y); if (!isNaN(n)) years.add(n); });
     appData.records.forEach(r => { const n = parseInt(r.year); if (!isNaN(n)) years.add(n); });
-
+ 
     const sorted = [...years].filter(y => !isNaN(y)).sort((a, b) => b - a);
     const defaultYear = savedYear && sorted.includes(parseInt(savedYear)) ? parseInt(savedYear) : currentYear;
     sel.innerHTML = sorted.map(y => `<option value="${y}" ${y === defaultYear ? 'selected' : ''}>${y}</option>`).join('');
-
+ 
     sel.onchange = () => {
       localStorage.setItem('oakbasin_year', sel.value);
       refreshAll();
     };
   }
-
+ 
   function ensureYearFields(year) {
     if (!appData.fields[year]) {
       appData.fields[year] = { Ryelage: [], Haylage: [], Silage: [] };
     }
   }
-
+ 
   // ─── NAVIGATION ──────────────────────────────────────────────
   function showPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
     document.querySelectorAll('nav button')[['record','view','settings'].indexOf(name)].classList.add('active');
-
+ 
     if (name === 'view') renderRecords();
     if (name === 'settings') renderSettings();
   }
-
+ 
   // ─── RECORD FORM ─────────────────────────────────────────────
   function onCropChange() {
     const crop = document.getElementById('cropSelect').value;
     const cutGroup = document.getElementById('cutGroup');
     const fieldSelect = document.getElementById('fieldSelect');
-
+ 
     cutGroup.style.display = crop === 'Haylage' ? '' : 'none';
-
+ 
     if (!crop) {
       fieldSelect.innerHTML = '<option value="">-- Select Crop First --</option>';
       return;
     }
-
+ 
     const year = getActiveYear();
     ensureYearFields(year);
     const fields = appData.fields[year][crop] || [];
-
+ 
     if (fields.length === 0) {
       fieldSelect.innerHTML = '<option value="">-- No fields configured. Go to Settings. --</option>';
     } else {
@@ -928,16 +946,16 @@
         fields.map(f => `<option value="${f}">${f}</option>`).join('');
     }
   }
-
+ 
   function calcDM(wet, dry) {
     return parseFloat(((dry - (wet - 100)) / 100 * 100).toFixed(1));
   }
-
+ 
   function calcDryMatter() {
     const wet = parseFloat(document.getElementById('wetWeight').value);
     const dry = parseFloat(document.getElementById('dryWeight').value);
     const el = document.getElementById('dmResult');
-
+ 
     if (wet > 0 && dry > 0) {
       const pct = calcDM(wet, dry);
       el.textContent = `Dry Matter: ${pct}%`;
@@ -958,21 +976,22 @@
       el.style.color = 'var(--primary-dark)';
     }
   }
-
+ 
   async function saveRecord() {
     const crop = document.getElementById('cropSelect').value;
     const cut = crop === 'Haylage' ? document.getElementById('cutSelect').value : '';
     const field = document.getElementById('fieldSelect').value;
     const date = document.getElementById('dateInput').value;
+    const time = document.getElementById('timeInput').value;
     const wet = parseFloat(document.getElementById('wetWeight').value);
     const dry = parseFloat(document.getElementById('dryWeight').value);
-
+ 
     if (!crop) return toast('Please select a crop.');
     if (!field) return toast('Please select a field.');
     if (!date) return toast('Please enter the date harvested.');
     if (!wet || wet <= 0) return toast('Please enter a valid wet weight.');
     if (!dry || dry <= 0) return toast('Please enter a valid dry weight.');
-
+ 
     const record = {
       id: Date.now(),
       year: getActiveYear(),
@@ -980,49 +999,51 @@
       cut,
       field,
       date,
+      time,
       wetWeight: wet,
       dryWeight: dry,
       dmPercent: calcDM(wet, dry)
     };
-
+ 
     const btn = document.getElementById('saveBtn');
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span> Saving...';
-
+ 
     try {
       await apiCall('addRecord', { data: JSON.stringify(record) });
       appData.records.push(record);
       localStorage.setItem('oakbasin_cache', JSON.stringify(appData));
-
+ 
       // Reset form
       document.getElementById('cropSelect').value = '';
       document.getElementById('cutGroup').style.display = 'none';
       document.getElementById('fieldSelect').innerHTML = '<option value="">-- Select Crop First --</option>';
       document.getElementById('dateInput').valueAsDate = new Date();
+      document.getElementById('timeInput').value = '';
       document.getElementById('wetWeight').value = '';
       document.getElementById('dryWeight').value = '';
       document.getElementById('dmResult').textContent = 'Dry Matter: --%';
       document.getElementById('dmResult').style.background = '#f0faf4';
       document.getElementById('dmResult').style.borderColor = '#b7e4c7';
       document.getElementById('dmResult').style.color = 'var(--primary-dark)';
-
+ 
       toast('Record saved!');
       setConnected(true);
     } catch(e) {
       toast('Error saving. Check your connection.');
       setConnected(false);
     }
-
+ 
     btn.disabled = false;
     btn.textContent = 'Save Record';
   }
-
+ 
   // ─── VIEW RECORDS ─────────────────────────────────────────────
   function renderRecords() {
     const year = getActiveYear();
     const filterCrop = document.getElementById('filterCrop').value;
     const filterField = document.getElementById('filterField').value;
-
+ 
     const allFields = new Set();
     appData.records.filter(r => String(r.year) === year).forEach(r => allFields.add(r.field));
     const fieldSel = document.getElementById('filterField');
@@ -1030,26 +1051,27 @@
     fieldSel.innerHTML = '<option value="">All Fields</option>' +
       [...allFields].sort().map(f => `<option value="${f}">${f}</option>`).join('');
     fieldSel.value = currentVal;
-
+ 
     let records = appData.records
       .filter(r => String(r.year) === year)
       .filter(r => !filterCrop || r.crop === filterCrop)
       .filter(r => !filterField || r.field === filterField)
       .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-
+ 
     const tbody = document.getElementById('recordsBody');
     const empty = document.getElementById('emptyState');
-
+ 
     if (records.length === 0) {
       tbody.innerHTML = '';
       empty.style.display = '';
       return;
     }
-
+ 
     empty.style.display = 'none';
     tbody.innerHTML = records.map(r => `
       <tr>
         <td>${formatDate(r.date)}</td>
+        <td>${formatTime(r.time)}</td>
         <td>${r.crop}</td>
         <td>${r.cut || '-'}</td>
         <td>${r.field}</td>
@@ -1060,14 +1082,28 @@
       </tr>
     `).join('');
   }
-
+ 
   function formatDate(d) {
     if (!d) return '';
     const parts = d.split('-');
     if (parts.length !== 3) return d;
     return `${parts[1]}/${parts[2]}/${parts[0]}`;
   }
-
+ 
+  function formatTime(t) {
+    if (!t) return '-';
+    // Convert 24-hour "14:30" to 12-hour "2:30 PM"
+    const parts = String(t).split(':');
+    if (parts.length < 2) return t;
+    let h = parseInt(parts[0]);
+    const m = parts[1].substring(0, 2);
+    if (isNaN(h)) return t;
+    const period = h >= 12 ? 'PM' : 'AM';
+    h = h % 12;
+    if (h === 0) h = 12;
+    return `${h}:${m} ${period}`;
+  }
+ 
   async function deleteRecord(id) {
     if (!confirm('Delete this record?')) return;
     showLoading();
@@ -1082,43 +1118,43 @@
     }
     hideLoading();
   }
-
+ 
   // ─── CSV EXPORT ──────────────────────────────────────────────
   function exportCSV() {
     const year = getActiveYear();
     const filterCrop = document.getElementById('filterCrop').value;
     const filterField = document.getElementById('filterField').value;
-
+ 
     let records = appData.records
       .filter(r => String(r.year) === year)
       .filter(r => !filterCrop || r.crop === filterCrop)
       .filter(r => !filterField || r.field === filterField)
       .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-
+ 
     if (records.length === 0) return toast('No records to export.');
-
-    const header = 'Date,Crop,Cut,Field,Wet Weight (g),Dry Weight (g),Dry Matter %';
+ 
+    const header = 'Date,Time,Crop,Cut,Field,Wet Weight (g),Dry Weight (g),Dry Matter %';
     const rows = records.map(r =>
-      `${r.date},${r.crop},${r.cut || ''},${csvEscape(r.field)},${r.wetWeight},${r.dryWeight},${r.dmPercent}`
+      `${r.date},${r.time || ''},${r.crop},${r.cut || ''},${csvEscape(r.field)},${r.wetWeight},${r.dryWeight},${r.dmPercent}`
     );
-
+ 
     const csv = [header, ...rows].join('\n');
     downloadFile(`OakBasin_DryMatter_${year}.csv`, csv, 'text/csv');
     toast('CSV exported!');
   }
-
+ 
   function csvEscape(val) {
     val = String(val);
     if (val.includes(',') || val.includes('"')) return `"${val.replace(/"/g, '""')}"`;
     return val;
   }
-
+ 
   // ─── FIELD SETTINGS ──────────────────────────────────────────
   function renderSettings() {
     const year = getActiveYear();
     ensureYearFields(year);
     document.getElementById('settingsYearLabel').textContent = year;
-
+ 
     ['Ryelage', 'Haylage', 'Silage'].forEach(crop => {
       const list = document.getElementById('fields-' + crop);
       const fields = appData.fields[year][crop] || [];
@@ -1127,26 +1163,26 @@
       ).join('');
       if (fields.length === 0) list.innerHTML = '<li style="color:var(--text-light);border:none;font-style:italic;">No fields added yet.</li>';
     });
-
+ 
     const copyYearSel = document.getElementById('copyFromYear');
     const years = Object.keys(appData.fields).filter(y => y !== year).sort((a, b) => b - a);
     copyYearSel.innerHTML = years.length
       ? years.map(y => `<option value="${y}">${y}</option>`).join('')
       : '<option value="">No other years</option>';
   }
-
+ 
   async function addField(crop) {
     const input = document.getElementById('newField-' + crop);
     const name = input.value.trim();
     if (!name) return;
-
+ 
     const year = getActiveYear();
     ensureYearFields(year);
-
+ 
     if (appData.fields[year][crop].includes(name)) {
       return toast('Field already exists.');
     }
-
+ 
     try {
       await apiCall('addField', { data: JSON.stringify({ year, crop, fieldName: name }) });
       appData.fields[year][crop].push(name);
@@ -1159,11 +1195,11 @@
       toast('Error adding field.');
     }
   }
-
+ 
   async function removeField(crop, fieldName) {
     if (!confirm(`Remove "${fieldName}" from ${crop} fields?`)) return;
     const year = getActiveYear();
-
+ 
     try {
       await apiCall('removeField', { data: JSON.stringify({ year, crop, fieldName }) });
       appData.fields[year][crop] = appData.fields[year][crop].filter(f => f !== fieldName);
@@ -1174,17 +1210,17 @@
       toast('Error removing field.');
     }
   }
-
+ 
   async function copyFieldsFromYear() {
     const fromYear = document.getElementById('copyFromYear').value;
     if (!fromYear) return toast('No year to copy from.');
     const toYear = getActiveYear();
-
+ 
     if (!confirm(`Copy all field assignments from ${fromYear} to ${toYear}?`)) return;
-
+ 
     ensureYearFields(toYear);
     const toAdd = [];
-
+ 
     ['Ryelage', 'Haylage', 'Silage'].forEach(crop => {
       const existing = new Set(appData.fields[toYear][crop]);
       (appData.fields[fromYear][crop] || []).forEach(f => {
@@ -1195,7 +1231,7 @@
       });
       appData.fields[toYear][crop] = [...existing].sort();
     });
-
+ 
     showLoading();
     try {
       // Add all new fields to Google Sheet
@@ -1210,57 +1246,58 @@
     }
     hideLoading();
   }
-
+ 
   // ─── EDIT RECORD MODAL ─────────────────────────────────────────
   let editingRecordId = null;
-
+ 
   function openEditModal(id) {
     const record = appData.records.find(r => r.id === id || String(r.id) === String(id));
     if (!record) return;
-
+ 
     editingRecordId = record.id;
-
+ 
     document.getElementById('editCrop').value = record.crop;
     onEditCropChange();
     document.getElementById('editField').value = record.field;
     document.getElementById('editDate').value = record.date;
+    document.getElementById('editTime').value = record.time || '';
     document.getElementById('editWet').value = record.wetWeight;
     document.getElementById('editDry').value = record.dryWeight;
-
+ 
     if (record.crop === 'Haylage') {
       document.getElementById('editCut').value = record.cut;
     }
-
+ 
     calcEditDM();
     document.getElementById('editModal').classList.add('show');
   }
-
+ 
   function closeEditModal() {
     document.getElementById('editModal').classList.remove('show');
     editingRecordId = null;
   }
-
+ 
   function onEditCropChange() {
     const crop = document.getElementById('editCrop').value;
     document.getElementById('editCutGroup').style.display = crop === 'Haylage' ? '' : 'none';
-
+ 
     const year = getActiveYear();
     ensureYearFields(year);
     const fields = appData.fields[year][crop] || [];
     const fieldSel = document.getElementById('editField');
-
+ 
     if (fields.length === 0) {
       fieldSel.innerHTML = '<option value="">-- No fields configured --</option>';
     } else {
       fieldSel.innerHTML = fields.map(f => `<option value="${f}">${f}</option>`).join('');
     }
   }
-
+ 
   function calcEditDM() {
     const wet = parseFloat(document.getElementById('editWet').value);
     const dry = parseFloat(document.getElementById('editDry').value);
     const el = document.getElementById('editDmPreview');
-
+ 
     if (wet > 0 && dry > 0) {
       const pct = calcDM(wet, dry);
       el.textContent = `Dry Matter: ${pct}%`;
@@ -1281,37 +1318,39 @@
       el.style.color = 'var(--primary-dark)';
     }
   }
-
+ 
   async function saveEditRecord() {
     if (!editingRecordId) return;
-
+ 
     const crop = document.getElementById('editCrop').value;
     const cut = crop === 'Haylage' ? document.getElementById('editCut').value : '';
     const field = document.getElementById('editField').value;
     const date = document.getElementById('editDate').value;
+    const time = document.getElementById('editTime').value;
     const wet = parseFloat(document.getElementById('editWet').value);
     const dry = parseFloat(document.getElementById('editDry').value);
-
+ 
     if (!crop) return toast('Please select a crop.');
     if (!field) return toast('Please select a field.');
     if (!date) return toast('Please enter the date harvested.');
     if (!wet || wet <= 0) return toast('Please enter a valid wet weight.');
     if (!dry || dry <= 0) return toast('Please enter a valid dry weight.');
-
+ 
     const idx = appData.records.findIndex(r => r.id === editingRecordId || String(r.id) === String(editingRecordId));
     if (idx === -1) return;
-
+ 
     const updated = {
       ...appData.records[idx],
       crop,
       cut,
       field,
       date,
+      time,
       wetWeight: wet,
       dryWeight: dry,
       dmPercent: calcDM(wet, dry)
     };
-
+ 
     showLoading();
     try {
       await apiCall('updateRecord', { data: JSON.stringify(updated) });
@@ -1325,11 +1364,11 @@
     }
     hideLoading();
   }
-
+ 
   document.getElementById('editModal').addEventListener('click', function(e) {
     if (e.target === this) closeEditModal();
   });
-
+ 
   // ─── HELPERS ─────────────────────────────────────────────────
   function downloadFile(filename, content, mimeType) {
     const blob = new Blob([content], { type: mimeType });
@@ -1340,20 +1379,20 @@
     a.click();
     URL.revokeObjectURL(url);
   }
-
+ 
   function toast(msg) {
     const el = document.getElementById('toast');
     el.textContent = msg;
     el.classList.add('show');
     setTimeout(() => el.classList.remove('show'), 2500);
   }
-
+ 
   function refreshAll() {
     onCropChange();
     renderRecords();
     renderSettings();
   }
-
+ 
   // ─── APP START ───────────────────────────────────────────────
   async function startApp() {
     document.getElementById('setupScreen').style.display = 'none';
@@ -1361,7 +1400,7 @@
     document.getElementById('dateInput').valueAsDate = new Date();
     await refreshData();
   }
-
+ 
   // ─── INIT ────────────────────────────────────────────────────
   (function init() {
     const config = loadConfig();
@@ -1373,6 +1412,7 @@
     }
   })();
 </script>
-
+ 
 </body>
 </html>
+ 
